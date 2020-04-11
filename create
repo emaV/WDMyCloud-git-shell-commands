@@ -1,0 +1,42 @@
+#!/bin/sh
+homeGit=/home/git
+sharesGit=/shares/git
+
+RED='\033[0;31m'
+GRE='\033[0;32m'
+YEL='\033[0;33m'
+NC='\033[0m' # No Color
+
+# If no project name is given
+if [ $# -eq 0 ]
+then
+
+	# Display usage and stop
+	echo "Usage: create <project.git>"
+	exit 1
+
+fi
+
+# Set the project name, adding .git if necessary
+project=$(echo "$*" | sed 's/\.git$\|$/.git/')
+repoName=$1
+
+projectDir=${sharesGit}/$project
+
+if [ -d $projectDir ]
+then
+  # Display error
+  echo -e "${YEL}Repository ${RED}${repoName}${YEL} ($projectDir) exists!${NC}"
+  echo -e "Project not created"
+  exit 2
+fi
+
+# Create and initialise the project
+mkdir "${sharesGit}/$project" && \
+cd "${sharesGit}/$project" && \
+git --bare init
+
+echo -e "Repository ${GRE}${repoName}${NC} ($projectDir) created!"
+
+exit 0
+

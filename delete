@@ -1,0 +1,39 @@
+#!/bin/sh
+homeGit=/home/git
+sharesGit=/shares/git
+
+RED='\033[0;31m'
+GRE='\033[0;32m'
+YEL='\033[0;33m'
+NC='\033[0m' # No Color
+
+# If no project name is given
+if [ $# -eq 0 ]
+then
+  # Display usage and stop
+  echo "Usage: delete <project.git>"
+  exit 1
+fi
+
+# Set the project name, adding .git if necessary
+project=$(echo "$*" | sed 's/\.git$\|$/.git/')
+repoName=$1
+
+projectDir=${sharesGit}/$project
+
+# Check if directory exists
+[ ! -d $projectDir ] && \
+  echo -e "${YEL}Repository ${RED}${repoName}${YEL} ($projectDir) doesn't exist!${NC}" && \
+  exit 10
+  
+# Check if repo is empty
+[ ! $(git --git-dir ${projectDir} count-objects| cut -d" " -f1) == 0 ] && \
+  echo -e "${YEL}Repository ${RED}${repoName}${YEL} ($projectDir) is not empty!${NC}" && \
+  exit 11
+
+# Delete repository
+rm -rf ${projectDir}
+echo -e "Repository ${GRE}${repoName}${NC} ($projectDir) deleted!"
+
+exit 0
+ 

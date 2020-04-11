@@ -1,0 +1,19 @@
+#!/bin/sh
+homeGit=/home/git
+
+RED='\033[0;31m'
+GRE='\033[0;32m'
+YEL='\033[0;33m'
+NC='\033[0m' # No Color
+
+i=1
+users=""
+for u in $(cat "${homeGit}/.ssh/authorized_keys" | awk '{print $NF |"sort" }'| awk '!seen[$0]++')
+do
+  echo -e "${YEL}$i${NC}) $u"
+  users="${users} $u"
+  i=$(expr $i + 1)
+done
+
+exit 0 
+

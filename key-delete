@@ -1,0 +1,40 @@
+#!/bin/sh
+homeGit=/home/git
+
+RED='\033[0;31m'
+GRE='\033[0;32m'
+YEL='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Read in the SSH key
+if [ $# -eq 0 ]
+then 
+  echo "Input the key to be deleted (user/comment):"
+  read user
+else
+  user=$1
+fi
+
+[ $(awk '{print $NF}' "${homeGit}/.ssh/authorized_keys"| grep -c $user) = 0 ] && \
+  echo -e "${YEL}Oops I didn't find any key for the user ${RED}${user}${NC}" && \
+  exit 10
+
+# Remove key
+sed -i "/${user}$/d" "${homeGit}/.ssh/authorized_keys" 
+echo -e "Key for the user ${GRE}user${NC} deleted!"
+  
+exit 0
+
+i=1
+users=""
+for u in $(cat "${homeGit}/.ssh/authorized_keys" | awk '{print $NF |"sort" }'| awk '!seen[$0]++')
+do
+  echo -e "${YEL}$i${NC} $u"
+  users="${users} $u"
+  i=$(expr $i + 1)
+done
+
+echo $users
+
+exit 0 
+
