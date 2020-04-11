@@ -86,6 +86,23 @@ touch .ssh/authorized_keys
 chmod 600 .ssh/authorized_keys
 ```
 
+If you get the error `PRNG is not SEEDED` you probably need to check some permissions as per [UNIX Health Check - PRNG is not SEEDED](https://unixhealthcheck.com/blog?id=304).
+
+Check permissions on random numbers generators, the "others" must have "read" access to these devices:
+
+```
+root@WD-emaV root # ls -l /dev/random /dev/urandom
+crw-rw-r--    1 root     root        1,   8 Jan  1  1970 /dev/random
+crw-rw-r--    1 root     root        1,   9 Jan  1  1970 /dev/urandom
+```
+
+If the permissions are not set correctly, change them as follows:
+
+```
+chmod o+r /dev/random /dev/urandom
+```
+
+Now stop and start the SSH daemon again, and retry if ssh works.
 
 ### Install git-shell-commands
 
