@@ -39,6 +39,11 @@ The steps above will install a version of git command line utilities that is com
 
 _Unfortunately WD’s software stops there and you’re on your own from this point on. They don’t provide a way for you to start serving git repositories from your network drive._
 
+Actually one of the many good things of the little gem known as `git` is that setup server from the client is quite easy. It is the same software, actually.
+
+It is just matter to setup an user and some configuration here and there, some little scripting as icing.
+
+
 ### Setup git account
 
 There are tools available for creating users in the shell but for the `git` user it is simple to do it manually.
@@ -56,10 +61,10 @@ git:x:1009:1004:,,,:/home/git:/usr/local/bin/git-shell
 The `git` home directory should be created with proper permissions
 
 ```
-mkdir /home/git
-chown -R git /home/git
-chgrp -R family /home/git
-chmod -R og+rwx /home/git
+$ mkdir /home/git
+$ chown -R git /home/git
+$ chgrp -R family /home/git
+$ chmod -R og+rwx /home/git
 ```
 
 ### Setup GIT repository directory
@@ -67,11 +72,11 @@ chmod -R og+rwx /home/git
 Create a directory that will host all the Git repository and set proper permissions
 
 ```
-mkdir /mnt/HD/HD_a2/git
-ln -s /mnt/HD/HD_a2/git /shares/git
-chown -R git /shares/git
-chgrp -R family /shares/git
-chmod -R og+rwx /shares/git
+$ mkdir /mnt/HD/HD_a2/git
+$ ln -s /mnt/HD/HD_a2/git /shares/git
+$ chown -R git /shares/git
+$ chgrp -R family /shares/git
+$ chmod -R og+rwx /shares/git
 ```
 
 #### Create ssh keys for the git user
@@ -79,11 +84,11 @@ chmod -R og+rwx /shares/git
 You may want to be able to push/pull code to external repository so the user `git` needs  the private/public keys.
 
 ```
-sudo -u git -s
-cd /home/git
-ssh-keygen -t rsa -b 4096 -C "git@WD-emaV" -q -N "" -f "/home/git/.ssh/id_rsa"
-touch .ssh/authorized_keys
-chmod 600 .ssh/authorized_keys
+$ sudo -u git -s
+$ cd /home/git
+$ ssh-keygen -t rsa -b 4096 -C "git@WD-emaV" -q -N "" -f "/home/git/.ssh/id_rsa"
+$ touch .ssh/authorized_keys
+$ chmod 600 .ssh/authorized_keys
 ```
 
 If you get the error `PRNG is not SEEDED` you probably need to check some permissions as per [UNIX Health Check - PRNG is not SEEDED](https://unixhealthcheck.com/blog?id=304).
@@ -91,7 +96,7 @@ If you get the error `PRNG is not SEEDED` you probably need to check some permis
 Check permissions on random numbers generators, the "others" must have "read" access to these devices:
 
 ```
-root@WD-emaV root # ls -l /dev/random /dev/urandom
+root # ls -l /dev/random /dev/urandom
 crw-rw-r--    1 root     root        1,   8 Jan  1  1970 /dev/random
 crw-rw-r--    1 root     root        1,   9 Jan  1  1970 /dev/urandom
 ```
@@ -99,7 +104,7 @@ crw-rw-r--    1 root     root        1,   9 Jan  1  1970 /dev/urandom
 If the permissions are not set correctly, change them as follows:
 
 ```
-chmod o+r /dev/random /dev/urandom
+$ chmod o+r /dev/random /dev/urandom
 ```
 
 Now stop and start the SSH daemon again, and retry if ssh works.
@@ -109,12 +114,12 @@ Now stop and start the SSH daemon again, and retry if ssh works.
 Install git shell commands and set proper permissions.
 
 ```
-cd /home/git
-wget --no-check-certificate  https://github.com/emaV/WDMyCloud-git-shell-commands/archive/master.zip
-unzip -j master.zip -d git-shell-commands
-chown -R git git-shell-commands
-chgrp -R family git-shell-commands
-chmod -R og+rwx git-shell-commands
+$ cd /home/git
+$ wget --no-check-certificate  https://github.com/emaV/WDMyCloud-git-shell-commands/archive/master.zip
+$ unzip -j master.zip -d git-shell-commands
+$ chown -R git git-shell-commands
+$ chgrp -R family git-shell-commands
+$ chmod -R og+rwx git-shell-commands
 ```
 
 ## Setup SSH password-less 
@@ -124,9 +129,9 @@ This step will allow remote user to connect the server using their keys.
 For every remote users append the public_key to the `authorized_keys` file with the git-shell-commands add-key command.
 
 ```
-cd /home/git
-sudo -u git -s
-./git-shell-commands/key-add
+$ cd /home/git
+$ sudo -u git -s
+$ ./git-shell-commands/key-add
 ```
 
 Use vi to edit file `/etc/ssh/sshd_config`
@@ -174,7 +179,7 @@ Reboot your WD My Cloud from the web interface.
 Login to git account and create a repository:
 
 ```
-[ema@macbook-pro ~/src/dashboard/git-shell-commands]$ ssh git@WD
+$ ssh git@WD
 Run 'help' for help, or 'exit' to leave.  Available commands:
 create
 delete
@@ -189,7 +194,7 @@ exit
 ```
 On the local machine:
 ```
-[ema@macbook-pro ~/src/dashboard/git-shell-commands]$ git clone WD:/shares/git/test.git
+$ git clone WD:/shares/git/test.git
 Cloning into 'test'...
 warning: You appear to have cloned an empty repository.
 ```
