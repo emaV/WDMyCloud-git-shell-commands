@@ -2,8 +2,8 @@
 How to use WD My Cloud as Git source code repository server.
 
 Thanks to:
-* [How To Use Your Network Drive as a Git Server | Making the Switch](https://cutecoder.org/software/git-server-network-drive/)
-* [Hosting an admin-friendly git server with git-shell | Blog | Plan Zero](http://planzero.org/blog/2012/10/24/hosting_an_admin-friendly_git_server_with_git-shell)
+* [How To Use Your Network Drive as a Git Server](https://cutecoder.org/software/git-server-network-drive/)
+* [Hosting an admin-friendly git server with git-shell](http://planzero.org/blog/2012/10/24/hosting_an_admin-friendly_git_server_with_git-shell)
 
 ## Installation Overview
 1. Enable SSH login from the web panel.
